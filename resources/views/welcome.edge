@@ -1,0 +1,24 @@
+@layout('layouts/main')
+
+@section('content')
+
+<div class="card" style="width: 30rem;">
+  <div class="card-header">
+    選擇自動生產追蹤碼平台
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <a class="form-control btn btn-outline-success" href="/justDSP1">只有DSP、DMP</a>
+    </li>
+    <li class="list-group-item">
+      <a class="form-control btn btn-outline-success" href="/justGA1">只有GA</a>
+    </li>
+    <li class="list-group-item">
+      <a class="form-control btn btn-outline-success" href="/justAdwords1">只有 Adwords</a>
+    </li>
+    <li class="list-group-item">
+      <a class="form-control btn btn-outline-success" href="/DSPGA">DSP、DMP + GA</a>
+    </li>
+  </ul>
+</div>
+@endsection
