@@ -1,0 +1,141 @@
+@layout('layouts.main')
+
+@section('content')
+
+<form action="justDSP_EV" method="get">
+  {{ csrfField() }}
+  <div class="form-group">
+    <label>確認站點名稱:</label>
+    <input type="text" name="site_name" class="form-control" value="{{site_name}}" readonly>
+  </div>
+  <div class="form-group">
+    <label>確認網站URL:</label>
+    <input type="text" name="site_url" class="form-control" value="{{site_url}}" readonly>
+  </div>
+  <div class="form-group">
+    <label>輸入事件數量(不含PV):</label>
+    <input type="number" name="eve_num" class="form-control" value="{{eve_num}}" readonly>
+  </div>
+
+  @each(item in all_eve)
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>事件名稱{{item}}:</label>
+      <input type="text" name="eve{{item}}" class="form-control myevent">
+    </div>
+    <div class="form-group col-md-6">
+      <label>事件註解{{item}}:</label>
+      <input type="text" name="eve_commit{{item}}" class="form-control">
+    </div>
+  </div>
+  <hr>
+  @endeach
+
+  <div class="form-group">
+    <button type="submit" id="sendbtn" class="form-control btn btn-outline-success">
+      <i></i>送出
+    </button>
+  </div>
+</form>
+
+<hr>
+
+<div class="code_block">
+
+</div>
+
+<script>
+  $(function () {
+
+    function calliframe() {
+      var sitename = $("input[name='site_name']").val();
+      $.ajax({
+        url: 'http://localhost:3333/'+sitename+'/DSP/pageview.txt',
+        type: "GET",
+        success: function (data) {
+          $('.loding').remove();
+          $("#pvcode").append('<textarea style="width:100%;height:235px;">' + data + '</textarea>')
+        },
+        error: function (xhr, ajaxOptions) {
+          if (xhr.status == 404) {
+            $('.loding').remove();
+            $("#pvcode").append('<p class="loding">Now Loading....</p>')
+            setTimeout(calliframe, 5000);
+          }
+
+        }
+
+      })
+    }
+
+
+
+
+ 
+
+    function calleventajax(event_name,id) {
+      console.log("call ajax event :" +event_name)
+
+      var sitename = $("input[name='site_name']").val();
+      $.ajax({
+        url: "http://localhost:3333/" + sitename + "/DSP/" + event_name + ".txt",
+        type: "GET",
+        success: function (data) {
+          $('.eve').remove();
+          $(id).append('<textarea id="'+event_name+'" style="width:100%;height:235px;">' + data + '</textarea>')
+        },
+        error: function (xhr, ajaxOptions) {
+          if (xhr.status == 404) {
+            $('.eve').remove();
+
+            $(id).append('<p class="eve">Now Loading....</p>')
+            //加這個if 判斷式 避免造成迴圈重複設定 timeout
+            if(id == '#eve1'){
+            setTimeout(ajaxloop, 3000);
+            }
+          }
+        }
+      })
+    }
+
+    function ajaxloop() {
+      console.log("call ajax loop")
+      //計算 event 的數量
+      var eve_num = $(".myevent").length;
+      for (var i = 0; i < eve_num; i++) {
+        var event_name = $('.myevent').get(i).value;
+        var nowid = '#eve'+(i+1);
+        var codeid = '#'+event_name;
+
+        if($(codeid).length>0){
+          console.log("跳過迴圈:" + codeid)
+          break;
+        }else{
+        calleventajax(event_name,nowid);
+        }
+      }
+    }
+
+    $("#sendbtn").click(function () {
+      //callajaxloop();
+      calliframe();
+      //PV 的 card
+      $(".code_block").append(
+        '<div class="card"><div class="card-header">pageview.txt</div><div class="card-body" id="pvcode"></div></div>'
+      )
+      //計算 event 的數量
+      var eve_num = $(".myevent").length;
+      for (var i = 0; i < eve_num; i++) {
+        var event_name = $('.myevent').get(i).value;
+        $(".code_block").append(
+          '<div class="card"><div class="card-header">'+event_name+'.txt</div><div class="card-body" id="eve'+(i+1)+'"></div></div>'
+        )
+      }
+      ajaxloop();
+    });
+
+
+  })
+</script>
+
+@endsection

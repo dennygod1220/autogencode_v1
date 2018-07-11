@@ -24,9 +24,19 @@ Route.post('/uploadpar','DashboardController.dspdmp')
 Route.get('/test','DashboardController.test')
 
 
+
+//只有DSP、DMP
+Route.get('/justDSP1','JustDSPController.index')
+//DSP輸入完資料
+Route.post('/justDSP2','JustDSPController.getInfo')
+//DSP只有PV
+Route.get('/justDSP_PV','JustDSPController.justPV').middleware('DSPPV')
+//DSP 有事件(包含PV)
+Route.get('/justDSP_EV','JustDSPController.haveEV').middleware('DSPEV')
+//只有GA
 Route.get('/justGA1','JustgaController.index')
 
 Route.post('/justGA2','JustgaController.getInfo1')
-
 //只有GA 的 PV
-Route.post('/justGA_PV','JustgaController.justPV')
+Route.get('/justGA_PV','JustgaController.justPV').middleware('GaPv')
+// .middleware('GaPv')

@@ -1,0 +1,25 @@
+
+
+<script src="//cdn.doublemax.net/js/rtid.js"></script>
+<script src="//dmp.eland-tech.com/dmpreceiver/eland_tracker.js"></script>
+<script>
+clickforce_rtid("8581001");
+ElandTracker.Track({'source':'CAP8581',
+'trackType':'view',
+'trackSubfolderDepth':3,
+'targetType':'pageView'
+});
+
+
+
+clickforce_rtid("8581002");
+ElandTracker.Track({'source':'CAP8581',
+'trackType':'view',
+'trackSubfolderDepth':3,
+'targetType':'usual'
+});
+</script>
+
+ 
+
+ 

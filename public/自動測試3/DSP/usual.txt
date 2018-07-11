@@ -1,0 +1,12 @@
+
+
+
+clickforce_rtid("8585002");
+ElandTracker.Track({'source':'CAP8585',
+'trackType':'view',
+'trackSubfolderDepth':3,
+'targetType':'usual'
+});
+</script>
+
+ 

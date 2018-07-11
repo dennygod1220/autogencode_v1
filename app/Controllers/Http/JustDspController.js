@@ -1,18 +1,12 @@
 'use strict'
 
 
-const { Builder, By, Key, promise, until } = use('selenium-webdriver');
-const firefox = use('selenium-webdriver/firefox');
-var fs = use('fs');
-
-class JustgaController {
-
+class JustDspController {
     async index({session,response,request,view}){
-        return view.render('justga.index');
+        return view.render('justDSP.index')
     }
-
-    //輸入完網站基本資料後跳轉至事件葉面
-    async getInfo1({session,response,request,view}){
+//接收網站 站點資訊
+    async getInfo({session,response,request,view}){
         var data = request.all();
         if(data.eve_num >0){
             var eve_num = [];
@@ -20,29 +14,28 @@ class JustgaController {
                 eve_num.push(i);
             }
             //有事件的
-            return view.render('justga.haveevent',{
+            return view.render('justdsp.haveevent',{
                 site_name:data.site_name,
-                in_site_name:data.in_site_name,
                 site_url:data.site_url,
-                eve_num:eve_num
+                eve_num:data.eve_num,
+                all_eve:eve_num
             })
         }
         else{
             //無事件的頁面
-            return view.render('justga.noevent',{
+            return view.render('justdsp.noevent',{
                 site_name:data.site_name,
-                in_site_name:data.in_site_name,
                 site_url:data.site_url,
                 eve_num:data.eve_num
             })
         }
     }
 
-//只有PV
+    //只有PV
     async justPV({session,response,request,view}){
-        
+
     }
-       
+
 }
 
-module.exports = JustgaController
+module.exports = JustDspController
